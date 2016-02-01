@@ -1,0 +1,33 @@
+DataDir=/data
+logfile=/tmp/logFile.log
+timeStamp=`date +'%Y%m%d%H%M%S' `
+for keySpace in `ls $DataDir`
+do
+        nodetool snapshot $keySpace -t $timeStamp >> $logfile
+        if [[ $? != 0 ]]
+        then
+                echo "Error creating snapshot" >> $logfile
+        fi
+        for cf in `ls $DataDir/$keySpace `
+        do
+                hostname=`hostname`
+                mkdir -p /cass_backups/$hostname/$timeStamp/$keySpace/$cf/
+                if [ -d "/data/$keySpace/$cf/snapshots" ]; then
+                        echo "Take action Dir is not Empty"
+                        rsync -rltD /data/$keySpace/$cf/snapshots /cass_backups/$hostname/$timeStamp/$keySpace/$cf/
+                else
+                        echo "Dir is empty"
+                fi
+                cd /cass_backups/$hostname
+                find . -maxdepth 1 -mtime +1 -type d -exec rm -r -f {} \;
+                if [[ $? != 0 ]]
+                then
+                        echo "Error removing older timestamps" >> $logfile
+                fi
+        done
+        nodetool clearsnapshot $keySpace
+        if [[ $? != 0 ]]
+        then
+                echo "Error while clearing snapshot" >> $logfile
+        fi
+done
