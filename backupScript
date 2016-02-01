@@ -1,3 +1,4 @@
+!#/bin/ksh
 DataDir=/data
 logfile=/tmp/logFile.log
 timeStamp=`date +'%Y%m%d%H%M%S' `
