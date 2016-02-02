@@ -21,9 +21,6 @@ AND min_index_interval = 128
 AND read_repair_chance = 0.1
 AND speculative_retry = '99.0PERCENTILE';
 
-
-
 CREATE INDEX bolean_a_active ON sax.ranged_filtered_with_indexes (boolean_a);
-
-
 CREATE INDEX bolean_b_active ON sax.ranged_filtered_with_indexes (boolean_b)
+alter table ranged_filtered_with_indexes ;
