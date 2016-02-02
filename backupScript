@@ -14,7 +14,7 @@ do
                 hostname=`hostname`
                 mkdir -p /cass_backups/$hostname/$timeStamp/$keySpace/$cf/
                 if [ -d "/data/$keySpace/$cf/snapshots" ]; then
-                        echo "Take action Dir is not Empty"
+                        echo "Dir is not Empty"
                         rsync -rltD /data/$keySpace/$cf/snapshots /cass_backups/$hostname/$timeStamp/$keySpace/$cf/
                 else
                         echo "Dir is empty"
