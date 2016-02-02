@@ -1,6 +1,6 @@
 !#/bin/ksh
 DataDir=/data
-logfile=/tmp/logFile.log
+logfile=/tmp/logFiles.log
 timeStamp=`date +'%Y%m%d%H%M%S' `
 for keySpace in `ls $DataDir`
 do
