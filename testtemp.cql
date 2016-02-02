@@ -24,3 +24,5 @@ AND speculative_retry = '99.0PERCENTILE';
 CREATE INDEX bolean_a_active ON sax.ranged_filtered_with_indexes (boolean_a);
 CREATE INDEX bolean_b_active ON sax.ranged_filtered_with_indexes (boolean_b)
 alter table ranged_filtered_with_indexes ;
+
+changing the directory
