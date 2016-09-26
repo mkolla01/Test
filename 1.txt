@@ -46,3 +46,5 @@ text_id text,
 CREATE INDEX bolean_a_active ON sax.ranged_filtered_with_indexes (boolean_a);
 
 CREATE INDEX bolean_b_active ON sax.ranged_filtered_with_indexes (boolean_b);
+
+###end
