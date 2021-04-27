@@ -1,0 +1,102 @@
+import json
+import re
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('--inFile', help="CFSTATS input file --inFile <file name>",  required=True, dest="infile" )
+args = parser.parse_args()
+
+# Function to convert different units to GB
+def convertToGB(size):
+    ele = size.split(" ") 
+    number = float(ele[0])
+    unit = ele[1]
+    temp = 0
+    if unit == 'bytes':  
+        temp = number/(1024*1024*1024)
+    
+    elif unit == 'KB':
+        temp = number/(1024*1024)           
+    
+    elif unit == 'KiB':
+        temp = number/(1024*1024)           
+    
+    elif unit == 'MB':   
+        temp = number/1024                                                                                            
+    
+    elif unit == 'MiB':   
+        temp = number/1024                                                                                            
+    
+    elif unit == 'GB': 
+        temp = number
+
+    elif unit == 'GiB': 
+        temp = number
+
+    elif unit == 'TB':
+        temp = number * 1024
+    
+    return round(temp, 2)
+
+def convertToMB(size):
+    ele = size.split(" ")
+    number = float(ele[0])
+    unit = ele[1]
+    temp = 0
+    if unit == 'bytes':
+        temp = number/(1024*1024)
+
+    elif unit == 'KB':
+        temp = number/(1024)
+
+    elif unit == 'KiB':
+        temp = number/(1024)
+
+    elif unit == 'MB':
+        temp = number
+
+    elif unit == 'MiB':
+        temp = number
+
+    elif unit == 'GB':
+        temp = number * 1024
+
+    elif unit == 'GiB':
+        temp = number * 1024
+
+    elif unit == 'TB':
+        temp = number * 1024 * 1024
+
+    return round(temp, 2)
+
+def unicodetoutf8(k):
+    for t in k:
+        if t:
+            return t.encode('utf-8')
+ 
+#with open('cfstatsAlerts0615.txt','r') as f:
+with open(args.infile,'r') as f:
+    tablesandsizes= {}
+    read_data = json.load(f,strict=False)
+    servers = read_data.keys()
+    for server in servers:
+        stdout = read_data[server]["stdout"]
+        pattern = re.compile("Table: (.*)|Table \(index\): (.*)") #match everything after "Table: " except new line
+        tables = pattern.findall(stdout) #find all that matches the pattern 
+        for table in tables: #adding new tables to the dictionary
+            if table not in tablesandsizes.keys(): 
+                tablesandsizes[table]=0
+        pattern1 = re.compile("Space used \(total\): (.*)") #match everything after "Space used (total): " except new line
+        size = pattern1.findall(stdout) #find all that matches the pattern1
+        
+        localtablesandsizes={}
+        for i in range(0,len(tables)):
+            localtablesandsizes[tables[i]]= convertToMB(size[i])
+	
+	for i in localtablesandsizes.keys():
+            tablesandsizes[i] = tablesandsizes[i] + localtablesandsizes[i]
+    
+	fTabAndSz=""
+    for k,v in tablesandsizes.items():
+        print("{0}  {1} MB".format(unicodetoutf8(k),v))
+        fTabAndSz= fTabAndSz + "%s %s"%(unicodetoutf8(k) ,"v") 
+    print fTabAndSz
