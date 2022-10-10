@@ -1,0 +1,10 @@
+---
+# file: roles/cassandra/tasks/main.yml
+
+- name: copy ccnodetool
+  copy:
+    src: ccnodetool
+    dest: /usr/local/bin/ccnodetool
+    owner: root
+    mode: '0755'
+  tags: [ install_cassandra, configure_cassandra ]
