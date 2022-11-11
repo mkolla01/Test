@@ -73,7 +73,7 @@ def main() :
     """
     bucket=""
     parser = argparse.ArgumentParser()
-    parser.add_argument( '--appname', help="Name of application ex: nucleus", required=True , dest="appName" )
+    parser.add_argument( '--appname', help="Name of application ex: fffff", required=True , dest="appName" )
     parser.add_argument( '--action', help="Action (list [ --bucket <bucket name>[ --path <path>]] | create --bucket <bucket name> )", required=True , dest="action" , choices = ['list', 'create'] )
     parser.add_argument( '--bucket', help=" Bucket name --bucket <bucket name>", required=False , dest="bucket" )
     #parser.add_argument( '--bucket',  required=False , dest="bucket" )
